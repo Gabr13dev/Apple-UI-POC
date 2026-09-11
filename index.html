@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sydney trip - Mail</title>
+<style>
+  :root{
+    --bg: #d9d9d9;
+    --frame: #ffffff;
+    --text-primary: #1c1c1e;
+    --text-secondary: #8a8a8e;
+    --divider: #e2e2e4;
+    --btn-bg: #efeff1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background:
+      repeating-linear-gradient(0deg, #cfcfcf 0px, #cfcfcf 1px, #d9d9d9 1px, #d9d9d9 90px),
+      repeating-linear-gradient(90deg, #cfcfcf 0px, #cfcfcf 1px, #d9d9d9 1px, #d9d9d9 90px);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* The tilted device */
+  .device {
+    position: relative;
+    width: 620px;
+    max-width: 92vw;
+    height: 760px;
+    background: var(--frame);
+    border-radius: 34px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.28),
+      0 8px 20px rgba(0,0,0,0.15);
+    transform: perspective(1400px) rotateY(-8deg) rotateX(2deg);
+    transform-style: preserve-3d;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .mail-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 34px 30px 0 34px;
+    position: relative;
+  }
+
+  /* Header row */
+  .mail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .sender-block {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, #bcd7ea 0%, #8fb7d8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .avatar svg { width: 100%; height: 100%; }
+
+  .sender-text .name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 2px 0;
+  }
+
+  .sender-text .to-line {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sender-text .to-line .chev {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .date-block {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  .date-block .pencil {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  /* Subject + body */
+  .mail-subject {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 22px 0 16px 0;
+  }
+
+  .mail-body {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    max-width: 460px;
+  }
+
+  .mail-body p {
+    margin: 0 0 22px 0;
+  }
+
+  .signoff {
+    margin: 0;
+  }
+
+  /* Attached image, bleeds to panel edges */
+  .attachment {
+    margin-top: auto;
+    margin-left: -34px;
+    width: calc(100% + 34px);
+    height: 260px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .attachment img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Right-hand control rail */
+  .control-rail {
+    width: 92px;
+    background: var(--frame);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 26px 0 20px 0;
+    border-left: 1px solid var(--divider);
+  }
+
+  .status-dot {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #0e0e10;
+    margin-bottom: 14px;
+  }
+
+  .clock {
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .wifi-btn, .nav-pill, .action-btn {
+    background: var(--btn-bg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .wifi-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    margin-bottom: 18px;
+    font-size: 18px;
+  }
+
+  .nav-pill {
+    width: 46px;
+    border-radius: 23px;
+    flex-direction: column;
+    padding: 8px 0;
+    gap: 10px;
+    margin-bottom: auto;
+  }
+
+  .nav-pill button {
+    background: none;
+    border: none;
+    font-size: 17px;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+
+  .action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 17px;
+  }
+
+  .action-btn.compose {
+    background: #0e0e10;
+    color: #fff;
+  }
+
+  .action-btn:hover, .nav-pill button:hover {
+    filter: brightness(0.94);
+  }
+
+  .action-btn:active, .nav-pill button:active, .wifi-btn:active {
+    transform: scale(0.93);
+  }
+
+  @media (max-width: 700px) {
+    .device {
+      transform: none;
+      height: auto;
+      min-height: 640px;
+      flex-direction: column;
+      width: 100%;
+    }
+    .control-rail {
+      flex-direction: row;
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid var(--divider);
+      justify-content: space-around;
+      padding: 14px 10px;
+    }
+    .nav-pill { flex-direction: row; margin-bottom: 0; }
+    .action-group { flex-direction: row; margin-top: 0; }
+    .status-dot, .clock { display: none; }
+    .attachment { height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="device" id="device">
+
+    <div class="mail-panel">
+      <div class="mail-header">
+        <div class="sender-block">
+          <div class="avatar">
+            <svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="21" cy="17" r="7" fill="#6b4a3a"/>
+              <path d="M21 25c-8 0-13 4.5-13 10v7h26v-7c0-5.5-5-10-13-10z" fill="#3a2a22"/>
+            </svg>
+          </div>
+          <div class="sender-text">
+            <p class="name">Agatha Yu</p>
+            <p class="to-line">To: Marcos Alonso <span class="chev">›</span></p>
+          </div>
+        </div>
+        <div class="date-block">
+          <span>Monday</span>
+          <span class="pencil">✎</span>
+        </div>
+      </div>
+
+      <h1 class="mail-subject">Sydney trip</h1>
+
+      <div class="mail-body">
+        <p>Marcos, what a trip. The Bondi beach day turned out to be everyone's favorite. I pulled the best shots off my camera, including a few good ones of the group at the Opera House. The rest are going in the shared album later tonight.</p>
+        <p class="signoff">Agatha</p>
+      </div>
+
+      <div class="attachment">
+        <img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1200&auto=format&fit=crop" alt="Bondi Beach, Sydney">
+      </div>
+    </div>
+
+    <div class="control-rail">
+      <div class="status-dot"></div>
+      <div class="clock" id="clock">9:41</div>
+      <button class="wifi-btn" title="Wi-Fi" onclick="pulse(this)">📶</button>
+
+      <div class="nav-pill">
+        <button title="Back" onclick="pulse(this)">‹</button>
+        <button title="Up" onclick="pulse(this)">︿</button>
+        <button title="Down" onclick="pulse(this)">﹀</button>
+      </div>
+
+      <div class="action-group">
+        <button class="action-btn" title="Delete" onclick="deleteMail(this)">🗑</button>
+        <button class="action-btn" title="Archive" onclick="pulse(this)">🗂</button>
+        <button class="action-btn" title="Reply" onclick="pulse(this)">↩</button>
+        <button class="action-btn compose" title="Compose" onclick="pulse(this)">✎</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function pulse(el) {
+    el.style.transform = 'scale(0.88)';
+    setTimeout(() => { el.style.transform = ''; }, 120);
+  }
+
+  function deleteMail(el) {
+    const panel = document.querySelector('.mail-panel');
+    panel.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    panel.style.opacity = '0';
+    panel.style.transform = 'translateX(-30px)';
+    setTimeout(() => {
+      panel.innerHTML = '<div style="margin:auto;text-align:center;color:#8a8a8e;font-size:16px;">Mensagem excluída</div>';
+      panel.style.display = 'flex';
+      panel.style.alignItems = 'center';
+      panel.style.justifyContent = 'center';
+      panel.style.opacity = '1';
+      panel.style.transform = 'none';
+    }, 350);
+  }
+
+  // Live clock like the mock's "9:41"
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours() % 12 || 12;
+    let m = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+</script>
+
+</body>
+</html>
